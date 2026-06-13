@@ -626,4 +626,10 @@
   buildWave(els.statusWave, 1200, 40, true);
   initMap();
   loadData();
+
+  // Mobil: ekran döndürme / yeniden boyutlandırmada haritayı düzelt
+  let resizeT;
+  const refreshMap = () => { if (map) map.invalidateSize(); };
+  window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(refreshMap, 200); });
+  window.addEventListener('orientationchange', () => setTimeout(refreshMap, 350));
 })();
