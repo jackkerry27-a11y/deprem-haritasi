@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CANLI DEPREM HARİTASI // Türkiye — AFAD · EMSC · USGS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="quakeRoot">
+
+  <!-- ░░░ GİRİŞ EKRANI ░░░ -->
+  <div id="landing" class="landing">
+    <div class="landing-rings" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+    <div class="landing-inner">
+      <div class="epicenter" aria-hidden="true"><span class="epi-core"></span></div>
+      <div class="landing-seismo">
+        <svg id="landingWave" viewBox="0 0 2400 160" preserveAspectRatio="none"><polyline points=""></polyline></svg>
+      </div>
+      <span class="landing-kicker mono">SİSMİK İZLEME AĞI · TÜRKİYE</span>
+      <h1>CANLI DEPREM <em>HARİTASI</em></h1>
+      <p class="landing-sub">AFAD · EMSC · USGS gerçek zamanlı verisi — konum, saat, büyüklük, derinlik</p>
+      <button id="enterBtn" class="enter-btn"><span class="eb-pulse"></span>SİSTEME GİR</button>
+      <span class="enter-note mono">⚠ Ses ve ekran sarsıntısı efekti içerir</span>
+      <div id="quakeLive" class="quake-live" hidden>
+        <span class="ql-icon">⚠</span>
+        <strong>ŞU ANDA DEPREM OLUYOR</strong>
+        <span class="ql-sub mono">Sistem hazırlanıyor… <b id="qlCount">10</b>s</span>
+      </div>
+    </div>
+    <div class="landing-foot mono">VERİ: AFAD / EMSC / USGS · RESMÎ KAYNAK: AFAD & KANDİLLİ</div>
+  </div>
+
+  <div class="global-scanlines" aria-hidden="true"></div>
+
+  <!-- ░░░ HUD ░░░ -->
+  <div class="hud-strip">
+    <div class="hud-inner">
+      <div class="hud-left">
+        <span class="hud-dot"></span> AĞ AKTİF
+        <span class="hud-sep">//</span>
+        <span class="hud-muted">CANLI VERİ</span>
+        <span class="hud-sep">//</span>
+        KAYNAK: <span class="hud-muted" id="hudSource">AFAD</span>
+      </div>
+      <div class="hud-center">
+        <span id="hudCoord">39.0°K 35.0°D</span>
+        <span class="hud-sep">//</span>
+        BÖLGE: TÜRKİYE
+      </div>
+      <div class="hud-right">
+        <span id="hudClock">--:--:--</span>
+        <span class="hud-sep">//</span>
+        <span class="hud-rec"><i></i> CANLI</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ░░░ HEADER ░░░ -->
+  <header class="app-header">
+    <div class="app-brand">
+      <span class="brand-glyph" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="brand-copy">
+        <strong>DEPREM<em>İZLEME</em></strong>
+        <small>CANLI SİSMİK HARİTA — TÜRKİYE</small>
+      </span>
+    </div>
+
+    <div class="header-metrics" id="headerStats"></div>
+
+    <div class="header-controls">
+      <div class="source-wrap">
+        <span class="ctrl-label">VERİ KAYNAĞI</span>
+        <div class="source-toggle" id="sourceToggle">
+          <button data-src="afad" class="active">AFAD</button>
+          <button data-src="emsc">EMSC</button>
+          <button data-src="usgs">USGS</button>
+        </div>
+      </div>
+      <div class="ctrl-group">
+        <button class="ctrl-btn" id="soundBtn" title="Ses uyarısı"></button>
+        <button class="ctrl-btn" id="refreshBtn" title="Yenile"><span class="rf-spin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v5h-5"/></svg></span></button>
+        <button class="ctrl-btn" id="infoBtn" title="Kaynak bilgisi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="7.5" r="0.6" fill="currentColor"/></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ░░░ STATUS BAR ░░░ -->
+  <div class="status-bar" id="statusBar">
+    <span class="live-pip" id="livePip"></span>
+    <svg class="status-wave" id="statusWave" viewBox="0 0 1200 40" preserveAspectRatio="none"><polyline points=""></polyline></svg>
+    <p id="statusText">Sismik veri akışına bağlanılıyor…</p>
+    <span class="last-update mono" id="lastUpdate"></span>
+  </div>
+
+  <!-- ░░░ DASHBOARD ░░░ -->
+  <main class="dashboard">
+    <aside class="op-sidebar">
+      <div class="op-side-section">
+        <div class="op-side-head">
+          <span class="ph-bar"></span> SON DEPREMLER
+          <span class="op-count mono" id="eqCount">—</span>
+        </div>
+        <div class="op-filters" id="magFilters">
+          <button class="op-filter active" data-min="0">TÜMÜ</button>
+          <button class="op-filter" data-min="2">2.0+</button>
+          <button class="op-filter" data-min="3">3.0+</button>
+          <button class="op-filter" data-min="4">4.0+</button>
+        </div>
+        <div class="op-list" id="eqList"><div class="eq-loading mono">VERİ YÜKLENİYOR…</div></div>
+      </div>
+    </aside>
+
+    <section class="op-map-wrap">
+      <div id="eqMap" class="op-map"></div>
+      <div class="map-frame" aria-hidden="true">
+        <span class="mf-corner tl"></span><span class="mf-corner tr"></span>
+        <span class="mf-corner bl"></span><span class="mf-corner br"></span>
+      </div>
+      <div class="map-title">
+        <span class="mono">REAL-TIME SEISMIC FEED</span>
+        <strong>TÜRKİYE DEPREM HARİTASI</strong>
+      </div>
+      <div class="map-legend">
+        <span class="ml-head mono">BÜYÜKLÜK (M)</span>
+        <div class="ml-row"><i style="background:#39d98a"></i> &lt; 2.0</div>
+        <div class="ml-row"><i style="background:#a3e635"></i> 2.0 – 2.9</div>
+        <div class="ml-row"><i style="background:#f5a524"></i> 3.0 – 3.9</div>
+        <div class="ml-row"><i style="background:#f97316"></i> 4.0 – 4.9</div>
+        <div class="ml-row"><i style="background:#ef4444"></i> 5.0 +</div>
+      </div>
+      <div class="op-detail" id="eqDetail">
+        <button class="op-detail-close" id="eqDetailClose" aria-label="Kapat">✕</button>
+        <div id="eqDetailBody"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ░░░ TOAST ░░░ -->
+  <div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+  <!-- ░░░ INFO MODAL ░░░ -->
+  <div class="modal" id="infoModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <button class="modal-close" id="infoClose">✕ KAPAT</button>
+      <div class="info-content">
+        <span class="modal-filecode">SİSTEM BİLGİSİ // VERİ KAYNAĞI</span>
+        <h2>CANLI SİSMİK VERİ</h2>
+        <p class="modal-desc">
+          Bu harita gerçek zamanlı, halka açık sismik ağlardan beslenir:
+          <strong>AFAD</strong> (yerel proxy üzerinden), <strong>EMSC</strong> ve <strong>USGS</strong>.
+          Veriler 60 saniyede bir otomatik güncellenir; konum, zaman, derinlik ve büyüklük gerçektir.
+          Üst menüden kaynak değiştirebilirsiniz.
+        </p>
+        <div class="info-peace">
+          <strong>RESMÎ KAYNAK //</strong> Türkiye için resmî makamlar <strong>AFAD</strong> ve
+          <strong>Kandilli Rasathanesi</strong>'dir. Acil durumda mutlaka resmî açıklamaları esas alın.
+        </div>
+        <div class="info-warn">
+          <strong>⚠ NOT:</strong> Trafik kazası / anlık can kaybı için Türkiye'de halka açık gerçek
+          zamanlı API olmadığından bu sistem yalnızca <u>canlı deprem verisi</u> gösterir.
+          Yeni ve belirgin depremlerde sesli + görsel uyarı verir.
+        </div>
+        <p class="info-src mono">KAYNAKLAR // afad.gov.tr · seismicportal.eu (EMSC) · earthquake.usgs.gov · koeri.boun.edu.tr</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /quakeRoot -->
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

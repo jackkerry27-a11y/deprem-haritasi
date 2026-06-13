@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="lg" x1="0" y1="0" x2="48" y2="48">
+      <stop offset="0%" stop-color="#E30A17"/>
+      <stop offset="100%" stop-color="#a00812"/>
+    </linearGradient>
+    <linearGradient id="lg2" x1="0" y1="0" x2="0" y2="48">
+      <stop offset="0%" stop-color="#c4a35a"/>
+      <stop offset="100%" stop-color="#8a7340"/>
+    </linearGradient>
+  </defs>
+  <path d="M24 2 L42 10 V38 L24 46 L6 38 V10 Z" fill="url(#lg)" stroke="url(#lg2)" stroke-width="1.5"/>
+  <path d="M24 8 L36 14 V34 L24 40 L12 34 V14 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <circle cx="24" cy="24" r="6" fill="none" stroke="#fff" stroke-width="1.2" opacity="0.9"/>
+  <circle cx="26.5" cy="24" r="4.8" fill="url(#lg)" stroke="none"/>
+  <polygon fill="#fff" points="30,24 34.5,21.5 32.5,24 34.5,26.5" opacity="0.95"/>
+  <line x1="24" y1="14" x2="24" y2="18" stroke="#c4a35a" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="24" y1="30" x2="24" y2="34" stroke="#c4a35a" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="14" y1="24" x2="18" y2="24" stroke="#c4a35a" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="30" y1="24" x2="34" y2="24" stroke="#c4a35a" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340">
+  <style>
+    @keyframes mapGlow { 0%,100% { filter: drop-shadow(0 0 8px rgba(227,10,23,0.5)); } 50% { filter: drop-shadow(0 0 24px rgba(227,10,23,0.9)); } }
+    @keyframes shine { 0% { transform: translateX(-200px); opacity: 0; } 30% { opacity: 0.4; } 100% { transform: translateX(900px); opacity: 0; } }
+    @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    .map-body { animation: mapGlow 3s ease-in-out infinite, floatY 5s ease-in-out infinite; transform-origin: center; }
+    .shine-bar { animation: shine 4s ease-in-out infinite; }
+    .star-group { transform-origin: 420px 165px; animation: floatY 5s ease-in-out infinite; }
+  </style>
+  <defs>
+    <clipPath id="turkeyClip"><path d="M463.76,43.37 L524.97,64.18 L574.67,55.88 L611.40,60.67 L661.77,32.59 L707.23,30.04 L748.32,56.45 L755.57,75.39 L751.47,101.57 L783.19,114.94 L800.00,130.65 L770.78,145.97 L784.10,207.67 L775.76,224.33 L799.09,267.43 L778.64,276.52 L763.66,262.82 L714.04,255.87 L695.71,264.23 L647.18,272.60 L624.19,271.69 L575.09,291.88 L539.99,292.04 L517.29,281.92 L470.32,296.88 L456.35,286.42 L454.04,316.43 L442.62,328.21 L431.19,340.00 L415.51,315.60 L431.66,295.40 L405.64,299.98 L369.96,287.60 L340.62,318.57 L275.87,324.61 L241.32,295.74 L195.33,293.93 L185.50,316.25 L156.01,322.63 L114.75,293.99 L68.17,294.96 L42.90,241.45 L11.73,211.61 L32.48,169.77 L5.44,144.06 L52.76,92.61 L118.47,90.46 L136.39,49.57 L217.70,56.70 L268.99,21.80 L318.71,6.59 L389.29,5.45 L463.76,43.37 Z M49.02,78.06 L13.42,107.03 L0.00,81.97 L0.58,70.87 L10.72,64.84 L23.93,31.17 L3.14,16.92 L46.61,0.00 L83.34,7.22 L88.41,27.90 L125.65,45.27 L117.89,58.45 L67.23,61.42 L49.02,78.06 Z"/></clipPath>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff1a2e"/>
+      <stop offset="100%" stop-color="#b00812"/>
+    </linearGradient>
+    <linearGradient id="shineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="50%" stop-color="rgba(255,255,255,0.35)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </linearGradient>
+  </defs>
+  <g class="map-body">
+    <path d="M463.76,43.37 L524.97,64.18 L574.67,55.88 L611.40,60.67 L661.77,32.59 L707.23,30.04 L748.32,56.45 L755.57,75.39 L751.47,101.57 L783.19,114.94 L800.00,130.65 L770.78,145.97 L784.10,207.67 L775.76,224.33 L799.09,267.43 L778.64,276.52 L763.66,262.82 L714.04,255.87 L695.71,264.23 L647.18,272.60 L624.19,271.69 L575.09,291.88 L539.99,292.04 L517.29,281.92 L470.32,296.88 L456.35,286.42 L454.04,316.43 L442.62,328.21 L431.19,340.00 L415.51,315.60 L431.66,295.40 L405.64,299.98 L369.96,287.60 L340.62,318.57 L275.87,324.61 L241.32,295.74 L195.33,293.93 L185.50,316.25 L156.01,322.63 L114.75,293.99 L68.17,294.96 L42.90,241.45 L11.73,211.61 L32.48,169.77 L5.44,144.06 L52.76,92.61 L118.47,90.46 L136.39,49.57 L217.70,56.70 L268.99,21.80 L318.71,6.59 L389.29,5.45 L463.76,43.37 Z M49.02,78.06 L13.42,107.03 L0.00,81.97 L0.58,70.87 L10.72,64.84 L23.93,31.17 L3.14,16.92 L46.61,0.00 L83.34,7.22 L88.41,27.90 L125.65,45.27 L117.89,58.45 L67.23,61.42 L49.02,78.06 Z" fill="url(#redGrad)" stroke="#c4a35a" stroke-width="1.2" stroke-linejoin="round"/>
+    <rect class="shine-bar" x="0" y="0" width="120" height="340" fill="url(#shineGrad)" clip-path="url(#turkeyClip)"/>
+    <g class="star-group" transform="translate(420,165)">
+      <circle cx="-8" cy="0" r="22" fill="none" stroke="#fff" stroke-width="5"/>
+      <circle cx="0" cy="0" r="18" fill="url(#redGrad)"/>
+      <polygon fill="#fff" points="18,0 28,-6 22,0 28,6"/>
+    </g>
+  </g>
+</svg>
