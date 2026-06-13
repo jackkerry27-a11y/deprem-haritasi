@@ -1,9 +1,3 @@
 {
-  "outputDirectory": ".",
-  "cleanUrls": false,
-  "functions": {
-    "api/afad.js": {
-      "maxDuration": 15
-    }
-  }
+  "outputDirectory": "public"
 }
